@@ -15,9 +15,6 @@ import java.util.logging.Logger;
 
 public class ConexionJDBC {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         
         // Configuración de la conexión JDBC        
@@ -41,19 +38,53 @@ public class ConexionJDBC {
             conexion = DriverManager.getConnection(url, usuario, password);
             statement = conexion.createStatement();
             
-            statement.executeUpdate("INSERT INTO usuarios (nombres, apellidos, cedula, correo_electronico, contrasena) VALUES (Juan, Guaviare, 1555888999, juan@gmail.com, Juan123");
+            // Inserción de un nuevo usuario
+            String insertQuery = "INSERT INTO usuarios (nombres, apellidos, cedula, correo_electronico, contrasena) VALUES "
+                    + "('Juan', 'Guaviare', '1555888999', 'juan@gmail.com', 'Juan123')";
+            int filasInsertadas = statement.executeUpdate(insertQuery);
+            
+            if (filasInsertadas > 0) {
+                System.out.println("Usuario insertado correctamente.");
+            } else {
+                System.out.println("Error al insertar el usuario.");
+            }
+            
+            // Consulta de usuarios
             rs = statement.executeQuery("SELECT * FROM usuarios");
-            rs.next();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombres = rs.getString("nombres");
+                String apellidos = rs.getString("apellidos");
+                
+                System.out.println(id + " : " + apellidos + ", " + nombres);
+            }
             
-            do{
-                System.out.println(rs.getInt("id")+" : "+rs.getString("apellidos")+", "+rs.getString("nombres"));
-            }while(rs.next());
+            // Actualización de nombre de usuario
+            String updateQuery = "UPDATE usuarios SET nombres = 'Marcos', apellidos = 'Rosas' WHERE nombres = 'Marco' AND apellidos = 'Rossi'";
+            int filasActualizadas = statement.executeUpdate(updateQuery);
             
+            if (filasActualizadas > 0) {
+                System.out.println("Nombre actualizado correctamente.");
+            } else {
+                System.out.println("No se encontró el usuario para actualizar.");
+            }
+            
+            // Eliminación de usuario
+            String deleteQuery = "DELETE FROM usuarios WHERE nombres = 'Elisa' AND apellidos = 'Rinaldi'";
+            int filasEliminadas = statement.executeUpdate(deleteQuery);
+            
+            if (filasEliminadas > 0) {
+                System.out.println("Usuario eliminado correctamente.");
+            } else {
+                System.out.println("No se encontró el usuario para eliminar.");
+            }
+            
+            rs.close();
+            statement.close();
+            conexion.close();
             
         } catch (SQLException ex) {
             Logger.getLogger(ConexionJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
-    
 }
