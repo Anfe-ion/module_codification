@@ -11,4 +11,12 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <exec.mainClass>com.yellow_cat.yellow_cat.Yellow_cat</exec.mainClass>
     </properties>
+    <dependencies>
+    <!-- Otras dependencias -->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.26</version> <!-- Cambiar por la versión más reciente disponible -->
+    </dependency>
+    </dependencies>
 </project>
